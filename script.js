@@ -34,8 +34,6 @@ function displayQuestion(index) {
       ).join('')}
     `;
   progress.textContent = `Question ${index + 1} of ${questions.length}`;
-
-  // Update button text dynamically
   submitButton.textContent = (index === questions.length - 1) ? "See Results" : "Next";
 }
 
@@ -64,8 +62,9 @@ function calculateResults() {
   submitButton.style.display = 'none';
   progress.style.display = 'none';
 
-  // Show feedback div after quiz completion
-  document.getElementById('feedback').style.display = 'block';
+  // Make feedback visible after results
+  const feedbackDiv = document.getElementById('feedback');
+  feedbackDiv.style.display = 'block';
 }
 
 submitButton.addEventListener('click', () => {
@@ -86,14 +85,17 @@ submitButton.addEventListener('click', () => {
   }
 });
 
+// Function to handle feedback button clicks
 function sendFeedback(response) {
   alert("Thanks for your feedback: " + response);
-  // Send feedback event to Google Analytics
+
   if (typeof gtag === 'function') {
     gtag('event', 'quiz_feedback', { 'response': response });
   }
+
   document.getElementById('feedback').innerHTML = "<p>Thanks for your feedback!</p>";
 }
 
-// Initial call to display the first question
+// Display the initial question on load
 displayQuestion(currentQuestionIndex);
+
