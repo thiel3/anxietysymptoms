@@ -71,8 +71,10 @@ submitButton.addEventListener('click', () => {
 
   // Hide intro text on quiz start
   const introText = document.getElementById('intro-text');
-  if (introText) introText.style.display = 'none';
 
+  if (introText && !introText.classList.contains('hidden')) {
+    introText.classList.add('hidden');
+  }
   const selectedOption = document.querySelector(`input[name="question${currentQuestionIndex}"]:checked`);
   
   if (!selectedOption) {
