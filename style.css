@@ -46,3 +46,9 @@ body {
     font-weight: bold;
   }
   
+  .progress {
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-align: right;
+    color: #555;
+  }
