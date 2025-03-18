@@ -68,6 +68,11 @@ function calculateResults() {
 }
 
 submitButton.addEventListener('click', () => {
+
+  // Hide intro text on quiz start
+  const introText = document.getElementById('intro-text');
+  if (introText) introText.style.display = 'none';
+
   const selectedOption = document.querySelector(`input[name="question${currentQuestionIndex}"]:checked`);
   
   if (!selectedOption) {
