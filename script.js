@@ -34,6 +34,9 @@ function displayQuestion(index) {
       ).join('')}
     `;
   progress.textContent = `Question ${index + 1} of ${questions.length}`;
+
+  // Update button text dynamically
+  submitButton.textContent = (index === questions.length - 1) ? "See Results" : "Next";
 }
 
 function calculateResults() {
@@ -74,19 +77,11 @@ submitButton.addEventListener('click', () => {
   currentQuestionIndex++;
 
   if (currentQuestionIndex < questions.length) {
-    displayNextQuestion();
+    displayQuestion(currentQuestionIndex);
   } else {
     calculateResults();
   }
 });
 
-function displayQuestionOrResults() {
-  if (currentQuestionIndex < questions.length) {
-    displayQuestion(currentQuestionIndex);
-  } else {
-    calculateResults();
-  }
-}
-
-// Initial call to display first question
+// Initial call to display the first question
 displayQuestion(currentQuestionIndex);
