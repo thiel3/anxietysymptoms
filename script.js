@@ -75,6 +75,7 @@ function sendFeedback(response) {
     gtag('event', 'quiz_feedback', { 'response': response });
   }
   document.getElementById('feedback').innerHTML = "<p>Thanks for your feedback!</p>";
+}
 
 submitButton.addEventListener('click', () => {
   const selectedOption = document.querySelector(`input[name="question${currentQuestionIndex}"]:checked`);
