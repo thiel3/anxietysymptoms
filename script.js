@@ -7,51 +7,49 @@ const questions = [
   "Difficulty breathing or shortness of breath",
   "Feeling dizzy, shaky, or trembling",
   "Muscle tension or unexplained aches and pains",
-  "Trouble falling asleep or staying asleep due to anxiety",
-  "Avoidance of situations due to anxiety"
+  "Trouble falling asleep or staying asleep",
+  "Avoiding situations due to anxiety"
 ];
 
 const answers = ["Never", "Rarely", "Sometimes", "Frequently", "Always"];
 
 let currentQuestionIndex = 0;
-let totalScore = 0;
+const userResponses = [];
 
 const quizContainer = document.getElementById('quiz');
-const progressText = document.getElementById('progress');
 const submitButton = document.getElementById('submit');
 const resultsContainer = document.getElementById('results');
+const progress = document.getElementById('progress');
 
-const userAnswers = [];
-
-function showQuestion(index) {
+function displayQuestion(index) {
   const currentQuestion = questions[index];
-  progress.textContent = `Question ${index + 1} of ${questions.length}`;
-
-  quiz.innerHTML = `
+  quizContainer.innerHTML = `
     <div class="question">
       <p>${currentQuestion}</p>
-      ${answers.map((option, val) => `
-        <label>
-          <input type="radio" name="answer" value="${val}">
-          ${option}
-        </label><br>
-      `).join('')}
+      ${answers.map((answer, i) =>
+        `<label>
+          <input type="radio" name="question${index}" value="${i}">
+          ${answer}
+        </label><br>`
+      ).join('')}
     `;
+  progress.textContent = `Question ${index + 1} of ${questions.length}`;
 }
 
-function showResults() {
-  let totalScore = userAnswers.reduce((sum, value) => sum + parseInt(value), 0);
+function calculateResults() {
+  const totalScore = userResponses.reduce((total, current) => total + parseInt(current), 0);
+
   let anxietyLevel, recommendation;
 
   if (totalScore <= 10) {
     anxietyLevel = "Mild Anxiety";
-    recommendation = "Consider basic relaxation techniques and read some of our articles on managing stress.";
+    recommendation = "Consider practicing relaxation techniques and exploring our articles for managing stress.";
   } else if (totalScore <= 24) {
     anxietyLevel = "Moderate Anxiety";
-    recommendation = "Explore self-help resources, guided exercises, and anxiety tracking journals.";
+    recommendation = "Explore self-help resources, guided relaxation exercises, and anxiety-tracking journals.";
   } else {
     anxietyLevel = "Severe Anxiety";
-    recommendation = "We strongly recommend consulting a mental health professional. Explore counseling resources for immediate help.";
+    recommendation = "We strongly recommend consulting a mental health professional. Consider professional counseling or immediate anxiety relief resources.";
   }
 
   resultsContainer.innerHTML = `
@@ -59,33 +57,36 @@ function showResults() {
     <p>${recommendation}</p>
   `;
 
-  quiz.innerHTML = '';
-  progress.textContent = "Quiz Complete!";
+  quizContainer.style.display = 'none';
   submitButton.style.display = 'none';
+  progress.style.display = 'none';
 }
 
-let currentQuestionIndex = 0;
-
 submitButton.addEventListener('click', () => {
-  const selectedOption = document.querySelector('input[type=radio]:checked');
+  const selectedOption = document.querySelector(`input[name="question${currentQuestionIndex}"]:checked`);
   
   if (!selectedOption) {
-    alert("Please select an option to continue.");
+    alert("Please select an answer before continuing.");
     return;
   }
 
-  userAnswers.push(selectedOption.value);
+  userResponses.push(selectedOption.value);
+  currentQuestionIndex++;
 
-  if (userAnswers.length < questions.length) {
-    showQuestion(userAnswers.length);
+  if (currentQuestionIndex < questions.length) {
+    displayNextQuestion();
   } else {
-    submitButton.style.display = 'none';
-    progress.style.display = 'none';
-    quiz.style.display = 'none';
-    showResults();
+    calculateResults();
+  }
+});
+
+function displayQuestionOrResults() {
+  if (currentQuestionIndex < questions.length) {
+    displayQuestion(currentQuestionIndex);
+  } else {
+    calculateResults();
   }
 }
 
-const answers = ["0", "1", "2", "3", "4"];
-
-showQuestion(0);
+// Initial call to display first question
+displayQuestion(currentQuestionIndex);
