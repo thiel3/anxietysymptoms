@@ -63,7 +63,18 @@ function calculateResults() {
   quizContainer.style.display = 'none';
   submitButton.style.display = 'none';
   progress.style.display = 'none';
+
+  // Show feedback div after quiz completion
+  document.getElementById('feedback').style.display = 'block';
 }
+
+function sendFeedback(response) {
+  alert("Thanks for your feedback: " + response);
+  // Send feedback event to Google Analytics
+  if (typeof gtag === 'function') {
+    gtag('event', 'quiz_feedback', { 'response': response });
+  }
+  document.getElementById('feedback').innerHTML = "<p>Thanks for your feedback!</p>";
 
 submitButton.addEventListener('click', () => {
   const selectedOption = document.querySelector(`input[name="question${currentQuestionIndex}"]:checked`);
